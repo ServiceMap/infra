@@ -1,0 +1,12 @@
+{
+  "databases": [
+    {
+      "id": "servicemap-redis",
+      "name": "ServiceMap Redis",
+      "connectionType": "STANDALONE",
+      "host": "servicemap-redis",
+      "port": 6379,
+      "db": 0
+    }
+  ]
+}

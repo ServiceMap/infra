@@ -1,0 +1,87 @@
+http:
+  routers:
+    traefik:
+      rule: "Host(`traefik.localhost`)"
+      service: traefik
+      entryPoints:
+        - web
+
+    keycloak:
+      rule: "Host(`keycloak.localhost`)"
+      service: keycloak
+      entryPoints:
+        - web
+    
+    rabbitmq:
+      rule: "Host(`rabbitmq.localhost`)"
+      service: rabbitmq
+      entryPoints:
+        - web
+          
+    redis-insight:
+      rule: "Host(`redis-insight.localhost`)"
+      service: redis-insight
+      entryPoints:
+        - web
+    
+    mailhog:
+      rule: "Host(`mailhog.localhost`)"
+      service: mailhog
+      entryPoints:
+        - web
+    
+    api:
+      rule: "Host(`api.localhost`)"
+      service: api
+      entryPoints:
+        - web
+    
+    ui:
+      rule: "Host(`localhost`) || HostRegexp(`^[a-z0-9-]+\\.localhost$`)"
+      service: ui
+      entryPoints:
+        - web
+      priority: 1
+
+  services:
+    traefik:
+      loadBalancer:
+        servers:
+          - url: "http://servicemap-traefik:8080"
+            
+    keycloak:
+      loadBalancer:
+        servers:
+          - url: "http://servicemap-keycloak:8081"
+    
+    rabbitmq:
+      loadBalancer:
+        servers:
+          - url: "http://servicemap-rabbitmq:15672"
+    
+    redis-insight:
+      loadBalancer:
+        servers:
+          - url: "http://servicemap-redis-insight:5540"
+    
+    mailhog:
+      loadBalancer:
+        servers:
+          - url: "http://servicemap-mailhog:8025"
+    
+    api:
+      loadBalancer:
+        servers:
+          - url: "http://servicemap-gateway:8085"
+    
+    ui:
+      loadBalancer:
+        servers:
+          - url: "http://servicemap-ui:5173"
+
+  middlewares:
+    tenant-header:
+      headers:
+        customRequestHeaders:
+          X-Tenant: "{tenant}"
+            
