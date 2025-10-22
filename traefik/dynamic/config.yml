@@ -52,7 +52,7 @@ http:
     keycloak:
       loadBalancer:
         servers:
-          - url: "http://servicemap-keycloak:8081"
+          - url: "http://servicemap-keycloak:8080"
     
     rabbitmq:
       loadBalancer:
