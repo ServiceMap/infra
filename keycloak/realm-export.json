@@ -1,6 +1,74 @@
 {
   "realm": "servicemap",
   "enabled": true,
+
+  "clients": [
+    {
+      "clientId": "ui",
+      "publicClient": true,
+      "redirectUris": [
+        "http://ui.localhost/*",
+        "http://*.ui.localhost/*"
+      ],
+      "webOrigins": ["+"],
+      "directAccessGrantsEnabled": true,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "attributes": {
+        "post.logout.redirect.uris": "http://ui.localhost/*"
+      },
+      "protocolMappers": [
+        {
+          "name": "realm roles",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-realm-role-mapper",
+          "consentRequired": false,
+          "config": {
+            "claim.name": "roles",
+            "jsonType.label": "String",
+            "user.attribute": "roles",
+            "multivalued": "true",
+            "access.token.claim": "true",
+            "id.token.claim": "true"
+          }
+        }
+      ]
+    },
+    {
+      "clientId": "api",
+      "publicClient": false,
+      "serviceAccountsEnabled": true,
+      "authorizationServicesEnabled": true,
+      "redirectUris": ["*"],
+      "secret": "super-secret-api-key",
+      "protocolMappers": [
+        {
+          "name": "realm roles",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-realm-role-mapper",
+          "consentRequired": false,
+          "config": {
+            "claim.name": "roles",
+            "jsonType.label": "String",
+            "user.attribute": "roles",
+            "multivalued": "true",
+            "access.token.claim": "true",
+            "id.token.claim": "true"
+          }
+        }
+      ]
+    }
+  ],
+
+  "roles": {
+    "realm": [
+      { "name": "super_admin" },
+      { "name": "company_admin" },
+      { "name": "master" },
+      { "name": "user" }
+    ]
+  },
+
   "users": [
     {
       "username": "superadmin",
@@ -15,14 +83,20 @@
       "email": "company@servicemap.com",
       "credentials": [{ "type": "password", "value": "admin", "temporary": false }],
       "realmRoles": ["company_admin"]
+    },
+    {
+      "username": "master",
+      "enabled": true,
+      "email": "master@servicemap.com",
+      "credentials": [{ "type": "password", "value": "admin", "temporary": false }],
+      "realmRoles": ["master"]
+    },
+    {
+      "username": "user",
+      "enabled": true,
+      "email": "user@servicemap.com",
+      "credentials": [{ "type": "password", "value": "admin", "temporary": false }],
+      "realmRoles": ["user"]
     }
-  ],
-  "roles": {
-    "realm": [
-      { "name": "super_admin" },
-      { "name": "company_admin" },
-      { "name": "master" },
-      { "name": "user" }
-    ]
-  }
+  ]
 }

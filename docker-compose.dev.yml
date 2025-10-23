@@ -59,16 +59,20 @@ services:
     image: quay.io/keycloak/keycloak:26.0
     container_name: servicemap-keycloak
     restart: unless-stopped
-    command:
-      - "start-dev"
-      - "--import-realm"
     environment:
+      - KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN}
+      - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
       - KC_DB=postgres
       - KC_DB_URL=jdbc:postgresql://postgres:5432/${POSTGRES_DB}
       - KC_DB_USERNAME=${POSTGRES_USER}
       - KC_DB_PASSWORD=${POSTGRES_PASSWORD}
-      - KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN}
-      - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
+      - KC_HTTP_RELATIVE_PATH=/auth
+      - KC_PROXY=edge
+      - KC_FEATURES=token-exchange
+      - KEYCLOAK_IMPORT=/opt/keycloak/data/import/realm-export.json
+    command:
+      - "start-dev"
+      - "--import-realm"
     volumes:
       - ./keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json:ro
     depends_on:
