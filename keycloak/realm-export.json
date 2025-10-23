@@ -1,0 +1,28 @@
+{
+  "realm": "servicemap",
+  "enabled": true,
+  "users": [
+    {
+      "username": "superadmin",
+      "enabled": true,
+      "email": "superadmin@servicemap.com",
+      "credentials": [{ "type": "password", "value": "admin", "temporary": false }],
+      "realmRoles": ["super_admin"]
+    },
+    {
+      "username": "companyadmin",
+      "enabled": true,
+      "email": "company@servicemap.com",
+      "credentials": [{ "type": "password", "value": "admin", "temporary": false }],
+      "realmRoles": ["company_admin"]
+    }
+  ],
+  "roles": {
+    "realm": [
+      { "name": "super_admin" },
+      { "name": "company_admin" },
+      { "name": "master" },
+      { "name": "user" }
+    ]
+  }
+}

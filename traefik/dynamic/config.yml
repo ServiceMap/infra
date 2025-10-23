@@ -1,0 +1,117 @@
+http:
+  routers:
+    traefik:
+      rule: "Host(`traefik.localhost`)"
+      service: traefik
+      entryPoints:
+        - web
+      priority: 100
+
+    keycloak:
+      rule: "Host(`keycloak.localhost`)"
+      service: keycloak
+      entryPoints:
+        - web
+      priority: 100
+    
+    rabbitmq:
+      rule: "Host(`rabbitmq.localhost`)"
+      service: rabbitmq
+      entryPoints:
+        - web
+      priority: 100
+          
+    redis-insight:
+      rule: "Host(`redis-insight.localhost`)"
+      service: redis-insight
+      entryPoints:
+        - web
+      priority: 100
+    
+    mailhog:
+      rule: "Host(`mailhog.localhost`)"
+      service: mailhog
+      entryPoints:
+        - web
+      priority: 100
+
+    prometheus:
+      rule: "Host(`prometheus.localhost`)"
+      service: prometheus
+      entryPoints:
+        - web
+      priority: 100
+
+    grafana:
+      rule: "Host(`grafana.localhost`)"
+      service: grafana
+      entryPoints:
+        - web
+      priority: 100
+
+    api:
+      rule: "Host(`api.localhost`)"
+      service: api
+      entryPoints:
+        - web
+      priority: 100
+    
+    ui:
+      rule: "Host(`localhost`) || HostRegexp(`^[a-z0-9-]+\\.localhost$`)"
+      service: ui
+      entryPoints:
+        - web
+      priority: 10
+
+  services:
+    traefik:
+      loadBalancer:
+        servers:
+          - url: "http://servicemap-traefik:8080"
+            
+    keycloak:
+      loadBalancer:
+        servers:
+          - url: "http://servicemap-keycloak:8080"
+    
+    rabbitmq:
+      loadBalancer:
+        servers:
+          - url: "http://servicemap-rabbitmq:15672"
+    
+    redis-insight:
+      loadBalancer:
+        servers:
+          - url: "http://servicemap-redis-insight:5540"
+    
+    mailhog:
+      loadBalancer:
+        servers:
+          - url: "http://servicemap-mailhog:8025"
+
+    prometheus:
+      loadBalancer:
+        servers:
+          - url: "http://servicemap-prometheus:9090"
+
+    grafana:
+      loadBalancer:
+        servers:
+          - url: "http://servicemap-grafana:3000"
+
+    api:
+      loadBalancer:
+        servers:
+          - url: "http://servicemap-gateway:8085"
+    
+    ui:
+      loadBalancer:
+        servers:
+          - url: "http://servicemap-ui:5173"
+
+  middlewares:
+    tenant-header:
+      headers:
+        customRequestHeaders:
+          X-Tenant: "{tenant}"
+            
