@@ -66,8 +66,8 @@ docker-compose -f docker-compose.dev.yml --env-file .env.dev down -v
 | RabbitMQ Management | http://localhost:15672 | http://rabbitmq.localhost | admin | admin |
 | Redis | localhost:6379 | - | - | - |
 | Redis Insight | http://localhost:5540 | http://redis-insight.localhost | - | - |
-| Prometheus | http://localhost:9090 | - | - | - |
-| Grafana | http://localhost:3000 | - | admin | admin |
+| Prometheus | http://localhost:9090 | http://prometheus.localhost | - | - |
+| Grafana | http://localhost:3000 | http://grafana.localhost | admin | admin |
 | MailHog Web UI | http://localhost:8025 | http://mailhog.localhost | - | - |
 | Gateway API | http://localhost:8085 | http://api.localhost | - | - |
 | UI Application | http://localhost:5173 | http://localhost | - | - |
