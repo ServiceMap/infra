@@ -1,0 +1,18 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    monitor: 'servicemap-monitor'
+
+scrape_configs:
+  # Traefik metrics
+  - job_name: 'traefik'
+    static_configs:
+      - targets: ['servicemap-traefik:8082']
+        labels:
+          service: 'traefik'
+
+  # Prometheus itself
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
