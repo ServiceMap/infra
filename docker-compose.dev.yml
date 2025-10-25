@@ -59,9 +59,14 @@ services:
     image: quay.io/keycloak/keycloak:26.0
     container_name: servicemap-keycloak
     restart: unless-stopped
+    build:
+      context: ../keycloak
+      dockerfile: docker/Dockerfile
     environment:
       - KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN}
       - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
       - KC_DB=postgres
       - KC_DB_URL=jdbc:postgresql://postgres:5432/${POSTGRES_DB}
       - KC_DB_USERNAME=${POSTGRES_USER}
@@ -74,7 +79,8 @@ services:
       - "start-dev"
       - "--import-realm"
     volumes:
-      - ./keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json:ro
+      - ./keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json
+      - ./keycloak/import-realm.sh:/opt/keycloak/import-realm.sh
     depends_on:
       postgres:
         condition: service_started
