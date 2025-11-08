@@ -82,7 +82,7 @@ Environment variables are defined in `.env.dev`. Key configurations:
 - `POSTGRES_DB=servicemap`
 
 ### Keycloak
-- `KEYCLOAK_ADMIN=admin`
+- `KEYCLOAK_ADMIN_USERNAME=admin`
 - `KEYCLOAK_ADMIN_PASSWORD=admin`
 
 ### RabbitMQ

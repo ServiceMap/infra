@@ -14,3 +14,9 @@ scrape_configs:
   - job_name: 'prometheus'
     static_configs:
       - targets: ['localhost:9090']
+
+  # Keycloak metrics
+  - job_name: 'keycloak'
+    metrics_path: '/auth/metrics'
+    static_configs:
+      - targets: ['servicemap-keycloak:8080']

@@ -108,10 +108,3 @@ http:
       loadBalancer:
         servers:
           - url: "http://servicemap-ui:5173"
-
-  middlewares:
-    tenant-header:
-      headers:
-        customRequestHeaders:
-          X-Tenant: "{tenant}"
-            

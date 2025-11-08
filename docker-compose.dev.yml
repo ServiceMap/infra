@@ -56,21 +56,32 @@ services:
 
   # KEYCLOAK
   keycloak:
-    image: quay.io/keycloak/keycloak:26.0
+    image: quay.io/keycloak/keycloak:26.4.0
     container_name: servicemap-keycloak
     restart: unless-stopped
-    command:
-      - "start-dev"
-      - "--import-realm"
+    build:
+      context: ../keycloak
+      dockerfile: docker/Dockerfile
     environment:
+      - KC_BOOTSTRAP_ADMIN_USERNAME=${KEYCLOAK_ADMIN_USERNAME}
+      - KC_BOOTSTRAP_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
       - KC_DB=postgres
       - KC_DB_URL=jdbc:postgresql://postgres:5432/${POSTGRES_DB}
       - KC_DB_USERNAME=${POSTGRES_USER}
       - KC_DB_PASSWORD=${POSTGRES_PASSWORD}
-      - KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN}
-      - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
+      - KC_HTTP_RELATIVE_PATH=/auth
+      - KC_PROXY=edge
+      - KC_FEATURES=token-exchange
+      - KC_METRICS_ENABLED=true
+      - KEYCLOAK_IMPORT=/opt/keycloak/data/import/realm-export.json
+    command:
+      - "start-dev"
+      - "--import-realm"
     volumes:
-      - ./keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json:ro
+      - ./keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json
+      - ./keycloak/import-realm.sh:/opt/keycloak/import-realm.sh
     depends_on:
       postgres:
         condition: service_started
@@ -203,8 +214,12 @@ services:
     container_name: servicemap-ui
     restart: unless-stopped
     environment:
-      - VITE_API_URL=http://api.localhost
-      - VITE_KEYCLOAK_URL=http://keycloak.localhost
+      - SENTRY_DSN=${SENTRY_DSN}
+      - STRIPE_PUBLIC_KEY=${STRIPE_PUBLIC_KEY}
+      - API_SERVER_URL=http://api.localhost
+      - KEYCLOAK_URL=http://keycloak.localhost
+      - KEYCLOAK_CLIENT_ID=ui
+      - KEYCLOAK_DEFAULT_REALM=servicemap
     ports:
       - "5173:5173"
     networks:
